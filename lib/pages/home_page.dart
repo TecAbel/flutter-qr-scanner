@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:qr_scanner/models/qr_model.dart';
 import 'package:qr_scanner/pages/dir_page.dart';
 import 'package:qr_scanner/pages/maps_page.dart';
+import 'package:qr_scanner/services/db_service.dart';
 import 'package:qr_scanner/services/ui_service.dart';
 import 'package:qr_scanner/widgets/widgets.dart';
 
@@ -36,6 +38,12 @@ class _HomeBody extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final uiService = Provider.of<UiService>(context);
+
+    final tempScan = QrModel(value: 'https://aaqui.vercel.com');
+    // DbService.db.newScan(tempScan);
+    // DbService.db.getAllScans().then((r) => print(r));
+    // DbService.db.getScanById(1);
+    DbService.db.getScansByType(ScanType.geo);
 
     switch (uiService.selected) {
       case 0:
