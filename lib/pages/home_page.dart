@@ -39,11 +39,13 @@ class _HomeBody extends StatelessWidget {
   Widget build(BuildContext context) {
     final uiService = Provider.of<UiService>(context);
 
-    final tempScan = QrModel(value: 'https://aaqui.vercel.com');
+    // final tempScan = QrModel(id: 2, value: 'https://abelardo.aqui.com');
     // DbService.db.newScan(tempScan);
+    // DbService.db.updateScan(tempScan);
     // DbService.db.getAllScans().then((r) => print(r));
     // DbService.db.getScanById(1);
-    DbService.db.getScansByType(ScanType.geo);
+    // DbService.db.getScansByType(ScanType.url);
+    // DbService.db.deleteAllScans();
 
     switch (uiService.selected) {
       case 0:

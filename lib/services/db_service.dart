@@ -82,6 +82,25 @@ class DbService {
     print(res);
     return res.isNotEmpty ? res.map((x) => QrModel.fromJson(x)).toList() : [];
   }
+
+  Future<int> updateScan(QrModel newScan) async {
+    final db = await database;
+    final res = await db.update('Scans', newScan.toJson(),
+        where: 'id = ?', whereArgs: [newScan.id]);
+    return res;
+  }
+
+  Future<int> deleteScan(int id) async {
+    final db = await database;
+    final res = await db.delete('Scans', where: 'id = ?', whereArgs: [id]);
+    return res;
+  }
+
+  Future<int> deleteAllScans() async {
+    final db = await database;
+    final res = await db.delete('Scans');
+    return res;
+  }
 }
 
 class ScanType {
