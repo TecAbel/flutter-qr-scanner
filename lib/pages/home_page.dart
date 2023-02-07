@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:qr_scanner/models/qr_model.dart';
 import 'package:qr_scanner/pages/dir_page.dart';
 import 'package:qr_scanner/pages/maps_page.dart';
 import 'package:qr_scanner/services/db_service.dart';
+import 'package:qr_scanner/services/scan_list_service.dart';
 import 'package:qr_scanner/services/ui_service.dart';
 import 'package:qr_scanner/widgets/widgets.dart';
 
@@ -12,13 +12,14 @@ class HomePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final scanService = Provider.of<ScanListService>(context, listen: false);
     return Scaffold(
       appBar: AppBar(
         title: const Text('Historial'),
         actions: [
           IconButton(
             icon: const Icon(Icons.delete_forever),
-            onPressed: () {},
+            onPressed: () => scanService.deleteAllScans(),
           ),
         ],
       ),
@@ -38,19 +39,15 @@ class _HomeBody extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final uiService = Provider.of<UiService>(context);
-
-    // final tempScan = QrModel(id: 2, value: 'https://abelardo.aqui.com');
-    // DbService.db.newScan(tempScan);
-    // DbService.db.updateScan(tempScan);
-    // DbService.db.getAllScans().then((r) => print(r));
-    // DbService.db.getScanById(1);
-    // DbService.db.getScansByType(ScanType.url);
-    // DbService.db.deleteAllScans();
+    final scanListService =
+        Provider.of<ScanListService>(context, listen: false);
 
     switch (uiService.selected) {
       case 0:
+        scanListService.loadScansByType(ScanType.geo);
         return const MapasPage();
       case 1:
+        scanListService.loadScansByType(ScanType.url);
         return const DireccionesPage();
       default:
         return const MapasPage();
