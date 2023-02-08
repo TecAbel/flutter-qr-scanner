@@ -1,5 +1,7 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:qr_scanner/config/app_theme.dart';
 import 'package:qr_scanner/pages/dir_page.dart';
 import 'package:qr_scanner/pages/maps_page.dart';
 import 'package:qr_scanner/services/db_service.dart';
@@ -19,7 +21,11 @@ class HomePage extends StatelessWidget {
         actions: [
           IconButton(
             icon: const Icon(Icons.delete_forever),
-            onPressed: () => scanService.deleteAllScans(),
+            // onPressed: () => scanService.deleteAllScans(),
+            onPressed: () => showDialog(
+              context: context,
+              builder: (_) => _ConfirmDelete(scanService: scanService),
+            ),
           ),
         ],
       ),
@@ -27,6 +33,53 @@ class HomePage extends StatelessWidget {
       bottomNavigationBar: const CustomNavigatorBar(),
       floatingActionButton: const CustomFloatingActionButton(),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
+    );
+  }
+}
+
+class _ConfirmDelete extends StatelessWidget {
+  const _ConfirmDelete({
+    required this.scanService,
+  });
+
+  final ScanListService scanService;
+
+  @override
+  Widget build(BuildContext context) {
+    return CupertinoAlertDialog(
+      // icon: const Icon(Icons.warning_rounded),
+      title: Row(mainAxisAlignment: MainAxisAlignment.center, children: const [
+        Icon(
+          Icons.warning_rounded,
+          size: 18,
+          color: CustomAppTheme.primaryColor,
+        ),
+        SizedBox(
+          width: 10,
+        ),
+        Text('Atención')
+      ]),
+      content:
+          const Text('¿Estás seguro de querer eliminar todos los escaneos?'),
+      actions: [
+        TextButton(
+          onPressed: () => Navigator.of(context).pop(),
+          child: const Text(
+            'Cancelar',
+            style: TextStyle(color: Colors.redAccent),
+          ),
+        ),
+        TextButton(
+          onPressed: () {
+            scanService.deleteAllScans();
+            Navigator.of(context).pop();
+          },
+          child: const Text(
+            'Aceptar',
+            style: TextStyle(color: CustomAppTheme.primaryColor),
+          ),
+        )
+      ],
     );
   }
 }
