@@ -4,6 +4,7 @@ import 'package:provider/provider.dart';
 import 'package:qr_scanner/services/db_service.dart';
 import 'package:qr_scanner/services/scan_list_service.dart';
 import 'package:qr_scanner/services/ui_service.dart';
+import 'package:qr_scanner/utils/url_launc.dart';
 
 class CustomFloatingActionButton extends StatelessWidget {
   const CustomFloatingActionButton({super.key});
@@ -20,8 +21,9 @@ class CustomFloatingActionButton extends StatelessWidget {
           false,
           ScanMode.QR,
         );
-        final type = await scanService.addNewScan(barcodeScanRes);
-        uiService.selected = type == ScanType.url ? 1 : 0;
+        final scan = await scanService.addNewScan(barcodeScanRes);
+        uiService.selected = scan.type == ScanType.url ? 1 : 0;
+        launchScan(scan);
       },
       child: const Icon(Icons.filter_center_focus),
     );

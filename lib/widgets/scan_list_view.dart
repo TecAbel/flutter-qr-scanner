@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:qr_scanner/config/app_theme.dart';
 import 'package:qr_scanner/services/scan_list_service.dart';
+import 'package:qr_scanner/utils/url_launc.dart';
 
 class ScanListView extends StatelessWidget {
   const ScanListView({
@@ -61,7 +62,7 @@ class ScanListView extends StatelessWidget {
                   Icons.keyboard_arrow_right,
                   color: Colors.grey,
                 ),
-                onTap: () => print('ontap on $index'),
+                onTap: () => launchScan(scans[index]),
               ),
             ),
           );

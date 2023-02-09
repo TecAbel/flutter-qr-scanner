@@ -6,7 +6,7 @@ class ScanListService extends ChangeNotifier {
   List<QrModel> scansList = [];
   String typeSelected = ScanType.url;
 
-  Future<String> addNewScan(String value) async {
+  Future<QrModel> addNewScan(String value) async {
     final scan = QrModel(value: value);
     final res = await DbService.db.newScan(scan);
 
@@ -15,7 +15,7 @@ class ScanListService extends ChangeNotifier {
       scansList.add(scan);
       notifyListeners();
     }
-    return scan.type!;
+    return scan;
   }
 
   Future<void> loadAllScans() async {
