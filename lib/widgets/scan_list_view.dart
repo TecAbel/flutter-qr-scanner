@@ -72,7 +72,7 @@ class ScanListView extends StatelessWidget {
                   Icons.keyboard_arrow_right,
                   color: Colors.grey,
                 ),
-                onTap: () => launchScan(scans[index]),
+                onTap: () => launchScan(context, scans[index]),
               ),
             ),
           );
