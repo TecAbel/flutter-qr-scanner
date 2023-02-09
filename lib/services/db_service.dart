@@ -23,7 +23,6 @@ class DbService {
   Future<Database> initDb() async {
     Directory documentsDir = await getApplicationDocumentsDirectory();
     final dbPath = join(documentsDir.path, 'qr_db.db');
-    print(dbPath);
 
     return await openDatabase(
       dbPath,
@@ -72,14 +71,12 @@ class DbService {
   Future<List<QrModel>> getAllScans() async {
     final db = await database;
     final res = await db.query('Scans');
-    print(res);
     return res.isNotEmpty ? res.map((x) => QrModel.fromJson(x)).toList() : [];
   }
 
   Future<List<QrModel>> getScansByType(String type) async {
     final db = await database;
     final res = await db.query('Scans', where: 'type = ?', whereArgs: [type]);
-    print(res);
     return res.isNotEmpty ? res.map((x) => QrModel.fromJson(x)).toList() : [];
   }
 

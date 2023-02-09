@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:qr_scanner/config/app_theme.dart';
@@ -17,7 +18,16 @@ class ScanListView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final scansService = Provider.of<ScanListService>(context);
+
     final scans = scansService.scansList;
+    if (scansService.isLoading) {
+      return const Center(
+        child: CupertinoActivityIndicator(
+          radius: 30,
+          color: CustomAppTheme.primaryColor,
+        ),
+      );
+    }
     return scans.isEmpty
         ? Center(
             child: Text(emptyMessage),
