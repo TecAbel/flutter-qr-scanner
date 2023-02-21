@@ -16,15 +16,25 @@ class MapPage extends StatefulWidget {
 class _MapPageState extends State<MapPage> {
   final Completer<GoogleMapController> _controller =
       Completer<GoogleMapController>();
-
-  final CameraPosition initialPosition = const CameraPosition(
-    target: LatLng(37.42796133580664, -122.085749655962),
-    zoom: 14.4746,
-  );
+  MapType mapType = MapType.normal;
 
   @override
   Widget build(BuildContext context) {
     QrModel? qr = ModalRoute.of(context)?.settings.arguments as QrModel;
+
+    CameraPosition initialPosition = CameraPosition(
+      target: qr.getLatLng(),
+      zoom: 17,
+      tilt: 60,
+    );
+
+    Set<Marker> markers = <Marker>{};
+
+    markers.add(Marker(
+      markerId: const MarkerId('geo-location'),
+      position: qr.getLatLng(),
+    ));
+
     if (qr.value.isEmpty) {
       return const Center(
         child: Text('falta arguments qrModel!'),
@@ -43,14 +53,52 @@ class _MapPageState extends State<MapPage> {
           'map',
           style: TextStyle(color: Colors.white),
         ),
+        trailing: IconButton(
+          icon: const Icon(
+            Icons.location_on,
+            size: 25,
+            color: Colors.white,
+          ),
+          onPressed: () async {
+            final GoogleMapController controller = await _controller.future;
+            controller.animateCamera(
+              CameraUpdate.newCameraPosition(
+                CameraPosition(
+                  target: qr.getLatLng(),
+                  zoom: 17,
+                ),
+              ),
+            );
+          },
+        ),
         backgroundColor: CustomAppTheme.primaryColor,
       ),
-      // body: Center(child: Text(qr.value)),
       body: GoogleMap(
-        mapType: MapType.hybrid,
+        mapType: mapType,
         initialCameraPosition: initialPosition,
+        zoomControlsEnabled: false,
+        markers: markers,
         onMapCreated: (GoogleMapController controller) {
           _controller.complete(controller);
+        },
+      ),
+      floatingActionButton: FloatingActionButton(
+        child: const Icon(Icons.layers),
+        onPressed: () {
+          setState(() {
+            switch (mapType) {
+              case MapType.normal:
+                mapType = MapType.satellite;
+                break;
+              case MapType.satellite:
+                mapType = MapType.terrain;
+                break;
+              case MapType.terrain:
+                mapType = MapType.normal;
+                break;
+              default:
+            }
+          });
         },
       ),
     );
